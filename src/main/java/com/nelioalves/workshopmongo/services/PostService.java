@@ -1,5 +1,6 @@
 package com.nelioalves.workshopmongo.services;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,12 @@ public class PostService {
 	
 	public List<Post> findByTitle(String text) {
 		return postRepository.searchTitle(text);
+	}
+	
+	public List<Post> fullSearch(String text, Instant minDate, Instant maxDate) {
+		// calcula 23 horas, 59 minutos, 59 segundos e 999 milissegundos. Assim, obtém-se o fim do dia:
+		// 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000 + 999 = 86399999
+		maxDate = maxDate.plusMillis(86_399_999);
+		return postRepository.fullSearch(text, minDate, maxDate);
 	}
 }
